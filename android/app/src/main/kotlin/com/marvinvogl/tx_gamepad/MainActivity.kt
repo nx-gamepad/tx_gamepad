@@ -1,4 +1,4 @@
-package com.example.tx_gamepad
+package com.marvinvogl.tx_gamepad
 
 import android.annotation.SuppressLint
 import android.view.KeyEvent

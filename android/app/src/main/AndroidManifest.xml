@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tx_gamepad">
+    package="com.marvinvogl.tx_gamepad">
    <application
-        android:label="tx_gamepad"
+        android:label="nx Gamepad"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
