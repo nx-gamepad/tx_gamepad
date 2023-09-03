@@ -12,12 +12,12 @@ class BroadcastButton extends StatefulWidget {
 }
 
 class _BroadcastButtonState extends State<BroadcastButton> {
-  late bool _state;
+  late bool state;
 
   @override
   void initState() {
     super.initState();
-    _state = false;
+    state = false;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       widget.game.context = context;
     });
@@ -25,34 +25,34 @@ class _BroadcastButtonState extends State<BroadcastButton> {
 
   @override
   Widget build(BuildContext context) {
-    if (_state) {
-      return FloatingActionButton(
-        onPressed: _stopBroadcast,
-        child: const Padding(
-          padding: EdgeInsets.all(20.0),
+    if (state) {
+      return IconButton(
+        onPressed: stopBroadcast,
+        icon: const Padding(
+          padding: EdgeInsets.all(8.0),
           child: CircularProgressIndicator(
-            color: Colors.white,
+            color: Colors.grey,
             strokeWidth: 2.0,
           ),
         ),
       );
     }
-    return FloatingActionButton(
-      onPressed: _startBroadcast,
-      child: const Icon(Icons.broadcast_on_home),
+    return IconButton(
+      onPressed: startBroadcast,
+      icon: const Icon(Icons.broadcast_on_home),
     );
   }
 
-  void _startBroadcast() {
-    Connection.service.startBroadcast(widget.game, _onBroadcastStop);
-    setState(() => _state = true);
+  void startBroadcast() {
+    Connection.service.startBroadcast(widget.game, onBroadcastStop);
+    setState(() => state = true);
   }
 
-  void _stopBroadcast() {
+  void stopBroadcast() {
     Connection.service.stopBroadcast();
   }
 
-  void _onBroadcastStop() {
-    setState(() => _state = false);
+  void onBroadcastStop() {
+    setState(() => state = false);
   }
 }

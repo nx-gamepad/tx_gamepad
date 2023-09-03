@@ -4,13 +4,13 @@ import 'package:n_gamepad/n_gamepad.dart';
 
 import '../layouts/menu_layout.dart';
 
-class GameExample extends Game {
-  GameExample(super.code);
+class Controller extends Game {
+  Controller(super.code) : super(name: 'Gamepad');
 
   @override
   Widget buildLayout(StatePacket packet) {
     switch (GameState.values[packet.state]) {
-      case GameState.menu:
+      case GameState.settings:
         return MenuLayout(packet.data);
     }
   }
@@ -23,5 +23,5 @@ class GameExample extends Game {
 }
 
 enum GameState {
-  menu,
+  settings,
 }

@@ -3,13 +3,19 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:n_gamepad/n_gamepad.dart';
+import 'package:n_minecraft/n_minecraft.dart';
 
 import '../models/game.dart';
 
-import '../widgets/broadcast_button.dart';
+import '../widgets/game_tile.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+
+  final List<Game> list = [
+    Controller(<int>[0, 0, 0]),
+    Minecraft(<int>[0, 0, 1]),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -26,26 +32,13 @@ class HomePage extends StatelessWidget {
               child: Text('${snapshot.error}'),
             );
           }
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: Connection.service.addresses
-                  .map<Widget>(_buildTextButton)
-                  .toList(),
-            ),
+          return ListView(
+            children: <Widget>[
+              for (Game game in list) GameTile(game: game),
+            ],
           );
         },
       ),
-      floatingActionButton: BroadcastButton(
-        game: GameExample([255, 255, 255]),
-      ),
-    );
-  }
-
-  Widget _buildTextButton(InternetAddress address) {
-    return TextButton(
-      onPressed: () => Connection.service.select(address),
-      child: Text(address.address),
     );
   }
 }

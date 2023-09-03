@@ -8,8 +8,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const HomePage(),
-      title: 'nx Gamepad Demo',
+      home: HomePage(),
+      title: 'nx Gamepad',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
