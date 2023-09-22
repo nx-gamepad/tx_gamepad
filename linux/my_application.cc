@@ -1,11 +1,14 @@
 #include "my_application.h"
 
 #include <flutter_linux/flutter_linux.h>
+#include <steam/steam_api.h>
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
 
 #include "flutter/generated_plugin_registrant.h"
+
+#include <thread>
 
 struct _MyApplication {
   GtkApplication parent_instance;
@@ -13,6 +16,38 @@ struct _MyApplication {
 };
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
+
+void action_event_callback(SteamInputActionEvent_t *event) {
+  InputDigitalActionHandle_t aButtonActionHandle = SteamInput()->GetDigitalActionHandle("turn_left");
+  if (event->digitalAction.actionHandle == aButtonActionHandle && event->digitalAction.digitalActionData.bActive && event->digitalAction.digitalActionData.bState) {
+    g_message("left on");
+  } else if (event->digitalAction.actionHandle == aButtonActionHandle && event->digitalAction.digitalActionData.bActive && !event->digitalAction.digitalActionData.bState) {
+    g_message("left off");
+  }
+  InputDigitalActionHandle_t bButtonActionHandle = SteamInput()->GetDigitalActionHandle("turn_right");
+  if (event->digitalAction.actionHandle == bButtonActionHandle && event->digitalAction.digitalActionData.bActive && event->digitalAction.digitalActionData.bState) {
+    g_message("right on");
+  } else if (event->digitalAction.actionHandle == bButtonActionHandle && event->digitalAction.digitalActionData.bActive && !event->digitalAction.digitalActionData.bState) {
+    g_message("right off");
+  }
+  InputDigitalActionHandle_t xButtonActionHandle = SteamInput()->GetDigitalActionHandle("forward_thrust");
+  if (event->digitalAction.actionHandle == xButtonActionHandle && event->digitalAction.digitalActionData.bActive && event->digitalAction.digitalActionData.bState) {
+    g_message("up on");
+  } else if (event->digitalAction.actionHandle == xButtonActionHandle && event->digitalAction.digitalActionData.bActive && !event->digitalAction.digitalActionData.bState) {
+    g_message("up off");
+  }
+  InputDigitalActionHandle_t yButtonActionHandle = SteamInput()->GetDigitalActionHandle("backward_thrust");
+  if (event->digitalAction.actionHandle == yButtonActionHandle && event->digitalAction.digitalActionData.bActive && event->digitalAction.digitalActionData.bState) {
+    g_message("down on");
+  } else if (event->digitalAction.actionHandle == yButtonActionHandle && event->digitalAction.digitalActionData.bActive && !event->digitalAction.digitalActionData.bState) {
+    g_message("down off");
+  }
+}
+
+void steam_input_loop() {
+  SteamInput()->EnableActionEventCallbacks(action_event_callback);
+  while (true) SteamAPI_RunCallbacks();
+}
 
 // Implements GApplication::activate.
 static void my_application_activate(GApplication* application) {
@@ -58,6 +93,11 @@ static void my_application_activate(GApplication* application) {
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
+
+  if (SteamInput()->Init(false)) {
+    std::thread steam_input_thread(steam_input_loop);
+    steam_input_thread.detach();
+  }
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
