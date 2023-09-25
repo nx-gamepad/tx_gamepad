@@ -94,10 +94,8 @@ static void my_application_activate(GApplication* application) {
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
 
-  if (SteamInput()->Init(false)) {
-    std::thread steam_input_thread(steam_input_loop);
-    steam_input_thread.detach();
-  }
+  std::thread steam_input_thread(steam_input_loop);
+  steam_input_thread.detach();
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }

@@ -28,8 +28,9 @@ class _BroadcastButtonState extends State<BroadcastButton> {
     if (state) {
       return IconButton(
         onPressed: stopBroadcast,
+        constraints: BoxConstraints.tight(const Size.square(40.0)),
         icon: const Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(4.0),
           child: CircularProgressIndicator(
             color: Colors.grey,
             strokeWidth: 2.0,
