@@ -6,10 +6,10 @@ class Controller extends Game {
   Controller(super.code) : super(name: 'Gamepad');
 
   @override
-  LayoutData buildLayout(StatePacket packet) {
+  Layout build(StatePacket packet) {
     switch (GameState.values[packet.state]) {
       case GameState.settings:
-        return LayoutData(MenuLayout(packet.data));
+        return MenuLayout(packet.data);
     }
   }
 
