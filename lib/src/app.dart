@@ -10,9 +10,6 @@ class App extends StatelessWidget {
     return MaterialApp(
       home: HomePage(),
       title: 'nx Gamepad',
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
     );
   }
 }

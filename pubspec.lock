@@ -123,20 +123,23 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  minecraft:
+    dependency: transitive
+    description:
+      path: "packages/minecraft"
+      ref: HEAD
+      resolved-ref: b22475fdafe50fb2c509650831e987e24bdbcb33
+      url: "https://github.com/devEnju/t_gamepad.git"
+    source: git
+    version: "0.0.1"
   n_gamepad:
     dependency: "direct main"
     description:
-      path: "../n_gamepad"
-      relative: true
-    source: path
-    version: "0.0.3"
-  n_minecraft:
-    dependency: "direct main"
-    description:
-      path: "../n_minecraft"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: n_gamepad
+      sha256: "789dfbfd30d594ae02d0e30154d782ef66679c57bb768032774e822b6227ee1f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   path:
     dependency: transitive
     description:
@@ -190,6 +193,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  t_gamepad:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: b22475fdafe50fb2c509650831e987e24bdbcb33
+      url: "https://github.com/devEnju/t_gamepad.git"
+    source: git
+    version: "0.0.1"
   term_glyph:
     dependency: transitive
     description:
@@ -223,5 +235,5 @@ packages:
     source: hosted
     version: "13.0.0"
 sdks:
-  dart: ">=3.2.0-0 <4.0.0"
-  flutter: ">=2.5.0"
+  dart: ">=3.3.4 <4.0.0"
+  flutter: ">=3.3.0"

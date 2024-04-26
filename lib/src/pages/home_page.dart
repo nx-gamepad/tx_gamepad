@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:n_gamepad/n_gamepad.dart';
-import 'package:n_minecraft/n_minecraft.dart';
+import 'package:t_gamepad/t_gamepad.dart';
 
 import '../models/game.dart';
 
@@ -12,7 +12,7 @@ import '../widgets/game_tile.dart';
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  final List<Game> list = [
+  final list = <Game>[
     Controller(<int>[0, 0, 0]),
     Minecraft(<int>[0, 0, 1]),
   ];
