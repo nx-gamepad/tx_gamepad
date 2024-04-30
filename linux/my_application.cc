@@ -17,26 +17,26 @@ struct _MyApplication {
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 
-void action_event_callback(SteamInputActionEvent_t *event) {
-  InputDigitalActionHandle_t aButtonActionHandle = SteamInput()->GetDigitalActionHandle("turn_left");
+void action_event_cb(SteamInputActionEvent_t *event) {
+  InputDigitalActionHandle_t aButtonActionHandle = SteamInput()->GetDigitalActionHandle("menu_left");
   if (event->digitalAction.actionHandle == aButtonActionHandle && event->digitalAction.digitalActionData.bActive && event->digitalAction.digitalActionData.bState) {
     g_message("left on");
   } else if (event->digitalAction.actionHandle == aButtonActionHandle && event->digitalAction.digitalActionData.bActive && !event->digitalAction.digitalActionData.bState) {
     g_message("left off");
   }
-  InputDigitalActionHandle_t bButtonActionHandle = SteamInput()->GetDigitalActionHandle("turn_right");
+  InputDigitalActionHandle_t bButtonActionHandle = SteamInput()->GetDigitalActionHandle("menu_right");
   if (event->digitalAction.actionHandle == bButtonActionHandle && event->digitalAction.digitalActionData.bActive && event->digitalAction.digitalActionData.bState) {
     g_message("right on");
   } else if (event->digitalAction.actionHandle == bButtonActionHandle && event->digitalAction.digitalActionData.bActive && !event->digitalAction.digitalActionData.bState) {
     g_message("right off");
   }
-  InputDigitalActionHandle_t xButtonActionHandle = SteamInput()->GetDigitalActionHandle("forward_thrust");
+  InputDigitalActionHandle_t xButtonActionHandle = SteamInput()->GetDigitalActionHandle("menu_up");
   if (event->digitalAction.actionHandle == xButtonActionHandle && event->digitalAction.digitalActionData.bActive && event->digitalAction.digitalActionData.bState) {
     g_message("up on");
   } else if (event->digitalAction.actionHandle == xButtonActionHandle && event->digitalAction.digitalActionData.bActive && !event->digitalAction.digitalActionData.bState) {
     g_message("up off");
   }
-  InputDigitalActionHandle_t yButtonActionHandle = SteamInput()->GetDigitalActionHandle("backward_thrust");
+  InputDigitalActionHandle_t yButtonActionHandle = SteamInput()->GetDigitalActionHandle("menu_down");
   if (event->digitalAction.actionHandle == yButtonActionHandle && event->digitalAction.digitalActionData.bActive && event->digitalAction.digitalActionData.bState) {
     g_message("down on");
   } else if (event->digitalAction.actionHandle == yButtonActionHandle && event->digitalAction.digitalActionData.bActive && !event->digitalAction.digitalActionData.bState) {
@@ -45,8 +45,70 @@ void action_event_callback(SteamInputActionEvent_t *event) {
 }
 
 void steam_input_loop() {
-  SteamInput()->EnableActionEventCallbacks(action_event_callback);
-  while (true) SteamAPI_RunCallbacks();
+  SteamInput()->EnableActionEventCallbacks(action_event_cb);
+  while (true) {
+    SteamAPI_RunCallbacks();
+    usleep(20000);
+  }
+}
+
+static void method_call_cb(FlMethodChannel *channel, FlMethodCall *method_call, gpointer user_data) {
+  const char *method = fl_method_call_get_name(method_call);
+
+  if (strcmp(method, "set_address") == 0) {
+    g_autoptr(FlValue) args = fl_method_call_get_args(method_call);
+
+    g_autoptr(FlValue) address = fl_value_lookup_string(args, "address");
+    g_autoptr(FlValue) port = fl_value_lookup_string(args, "port");
+
+    if (address != nullptr && port != nullptr) {
+      if (fl_value_get_type(address) == FL_VALUE_TYPE_STRING && fl_value_get_type(port) == FL_VALUE_TYPE_INT) {
+        // Set up connection
+        g_message("Address: %s", (const char *)fl_value_get_string(address));
+        g_message("Port: %d", (int)fl_value_get_int(port));
+      }
+      g_autoptr(FlValue) result = nullptr;
+      g_autoptr(GError) error = nullptr;
+      fl_method_call_respond_success(method_call, result, &error);
+    } else {
+      g_autoptr(FlValue) details = nullptr;
+      g_autoptr(GError) error = nullptr;
+      fl_method_call_respond_error(method_call, "UNAVAILABLE", "Address unable to be set.", details, &error);
+    }
+  } else if (strcmp(method, "reset_address") == 0) {
+    // Reset connection
+
+    g_autoptr(FlValue) result = nullptr;
+    g_autoptr(GError) error = nullptr;
+    fl_method_call_respond_success(method_call, result, &error);
+  } else if (strcmp(method, "stop_control") == 0) {
+    // g_autoptr(FlValue) result = nullptr;
+    // g_autoptr(GError) error = nullptr;
+    // fl_method_call_respond_success(method_call, result, &error);
+  } else if (strcmp(method, "block_control") == 0) {
+    // g_autoptr(FlValue) result = nullptr;
+    // g_autoptr(GError) error = nullptr;
+    // fl_method_call_respond_success(method_call, result, &error);
+  } else if (strcmp(method, "resume_control") == 0) {
+    // g_autoptr(FlValue) result = nullptr;
+    // g_autoptr(GError) error = nullptr;
+    // fl_method_call_respond_success(method_call, result, &error);
+  } else if (strcmp(method, "turn_screen_on") == 0) {
+    // Turn screen brightness up
+
+    g_autoptr(FlValue) result = fl_value_new_bool(true);
+    g_autoptr(GError) error = nullptr;
+    fl_method_call_respond_success(method_call, result, &error);
+  } else if (strcmp(method, "turn_screen_off") == 0) {
+    // Turn screen brightness down
+
+    g_autoptr(FlValue) result = fl_value_new_bool(false);
+    g_autoptr(GError) error = nullptr;
+    fl_method_call_respond_success(method_call, result, &error);
+  } else {
+    g_autoptr(GError) error = nullptr;
+    fl_method_call_respond_not_implemented(method_call, &error);
+  }
 }
 
 // Implements GApplication::activate.
@@ -75,11 +137,11 @@ static void my_application_activate(GApplication* application) {
   if (use_header_bar) {
     GtkHeaderBar* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
     gtk_widget_show(GTK_WIDGET(header_bar));
-    gtk_header_bar_set_title(header_bar, "tx_gamepad");
+    gtk_header_bar_set_title(header_bar, "nx Gamepad");
     gtk_header_bar_set_show_close_button(header_bar, TRUE);
     gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
   } else {
-    gtk_window_set_title(window, "tx_gamepad");
+    gtk_window_set_title(window, "nx Gamepad");
   }
 
   gtk_window_fullscreen(GTK_WINDOW(window));
@@ -93,6 +155,24 @@ static void my_application_activate(GApplication* application) {
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
+
+  FlEngine *engine = fl_view_get_engine(view);
+  g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
+  g_autoptr(FlBinaryMessenger) messenger = fl_engine_get_binary_messenger(engine);
+
+  g_autoptr(FlMethodChannel) channel = fl_method_channel_new(messenger, "com.marvinvogl.n_gamepad/method", FL_METHOD_CODEC(codec));
+  g_autoptr(FlEventChannel) dpad_channel = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/dpad", FL_METHOD_CODEC(codec));
+  g_autoptr(FlEventChannel) joystick_left = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/joystick_left", FL_METHOD_CODEC(codec));
+  g_autoptr(FlEventChannel) joystick_right = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/joystick_right", FL_METHOD_CODEC(codec));
+  g_autoptr(FlEventChannel) trigger_left = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/trigger_left", FL_METHOD_CODEC(codec));
+  g_autoptr(FlEventChannel) trigger_right = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/trigger_right", FL_METHOD_CODEC(codec));
+
+  fl_method_channel_set_method_call_handler(channel, method_call_cb, nullptr, nullptr);
+  // fl_event_channel_set_stream_handlers(dpad_channel, control_listen_cb, control_cancel_cb, nullptr, nullptr);
+  // fl_event_channel_set_stream_handlers(joystick_left, control_listen_cb, control_cancel_cb, nullptr, nullptr);
+  // fl_event_channel_set_stream_handlers(joystick_right, control_listen_cb, control_cancel_cb, nullptr, nullptr);
+  // fl_event_channel_set_stream_handlers(trigger_left, control_listen_cb, control_cancel_cb, nullptr, nullptr);
+  // fl_event_channel_set_stream_handlers(trigger_right, control_listen_cb, control_cancel_cb, nullptr, nullptr);
 
   std::thread steam_input_thread(steam_input_loop);
   steam_input_thread.detach();

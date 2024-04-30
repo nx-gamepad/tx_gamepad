@@ -37,7 +37,7 @@ endfunction()
 
 if(NOT EXISTS ${STEAMWORKS_SDK_BUILD_DIR})
   execute_process(
-    COMMAND unzip -q ${steamworks_sdk_SOURCE_DIR}/steamworks_sdk_158.zip
+    COMMAND unzip -q ${steamworks_sdk_SOURCE_DIR}/steamworks_sdk_159.zip
     WORKING_DIRECTORY ${STEAMWORKS_BUILD_DIR}
   )
 
