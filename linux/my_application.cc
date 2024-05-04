@@ -161,18 +161,16 @@ static void my_application_activate(GApplication* application) {
   g_autoptr(FlBinaryMessenger) messenger = fl_engine_get_binary_messenger(engine);
 
   g_autoptr(FlMethodChannel) channel = fl_method_channel_new(messenger, "com.marvinvogl.n_gamepad/method", FL_METHOD_CODEC(codec));
+  g_autoptr(FlEventChannel) button_channel = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/button", FL_METHOD_CODEC(codec));
   g_autoptr(FlEventChannel) dpad_channel = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/dpad", FL_METHOD_CODEC(codec));
-  g_autoptr(FlEventChannel) joystick_left = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/joystick_left", FL_METHOD_CODEC(codec));
-  g_autoptr(FlEventChannel) joystick_right = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/joystick_right", FL_METHOD_CODEC(codec));
-  g_autoptr(FlEventChannel) trigger_left = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/trigger_left", FL_METHOD_CODEC(codec));
-  g_autoptr(FlEventChannel) trigger_right = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/trigger_right", FL_METHOD_CODEC(codec));
+  g_autoptr(FlEventChannel) joystick_channel = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/joystick", FL_METHOD_CODEC(codec));
+  g_autoptr(FlEventChannel) trigger_channel = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/trigger", FL_METHOD_CODEC(codec));
 
   fl_method_channel_set_method_call_handler(channel, method_call_cb, nullptr, nullptr);
+  // fl_event_channel_set_stream_handlers(button_channel, control_listen_cb, control_cancel_cb, nullptr, nullptr);
   // fl_event_channel_set_stream_handlers(dpad_channel, control_listen_cb, control_cancel_cb, nullptr, nullptr);
-  // fl_event_channel_set_stream_handlers(joystick_left, control_listen_cb, control_cancel_cb, nullptr, nullptr);
-  // fl_event_channel_set_stream_handlers(joystick_right, control_listen_cb, control_cancel_cb, nullptr, nullptr);
-  // fl_event_channel_set_stream_handlers(trigger_left, control_listen_cb, control_cancel_cb, nullptr, nullptr);
-  // fl_event_channel_set_stream_handlers(trigger_right, control_listen_cb, control_cancel_cb, nullptr, nullptr);
+  // fl_event_channel_set_stream_handlers(joystick_channel, control_listen_cb, control_cancel_cb, nullptr, nullptr);
+  // fl_event_channel_set_stream_handlers(trigger_channel, control_listen_cb, control_cancel_cb, nullptr, nullptr);
 
   std::thread steam_input_thread(steam_input_loop);
   steam_input_thread.detach();
