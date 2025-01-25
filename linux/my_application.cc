@@ -42,14 +42,12 @@ void action_event_cb(SteamInputActionEvent_t *event) {
   } else if (event->digitalAction.actionHandle == yButtonActionHandle && event->digitalAction.digitalActionData.bActive && !event->digitalAction.digitalActionData.bState) {
     g_message("down off");
   }
+  g_message("test");
 }
 
-void steam_input_loop() {
-  SteamInput()->EnableActionEventCallbacks(action_event_cb);
-  while (true) {
-    SteamAPI_RunCallbacks();
-    usleep(20000);
-  }
+gboolean steam_input_loop(gpointer user_data) {
+  SteamAPI_RunCallbacks();
+  return TRUE;
 }
 
 static void method_call_cb(FlMethodChannel *channel, FlMethodCall *method_call, gpointer user_data) {
@@ -161,10 +159,10 @@ static void my_application_activate(GApplication* application) {
   g_autoptr(FlBinaryMessenger) messenger = fl_engine_get_binary_messenger(engine);
 
   g_autoptr(FlMethodChannel) channel = fl_method_channel_new(messenger, "com.marvinvogl.n_gamepad/method", FL_METHOD_CODEC(codec));
-  g_autoptr(FlEventChannel) button_channel = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/button", FL_METHOD_CODEC(codec));
-  g_autoptr(FlEventChannel) dpad_channel = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/dpad", FL_METHOD_CODEC(codec));
-  g_autoptr(FlEventChannel) joystick_channel = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/joystick", FL_METHOD_CODEC(codec));
-  g_autoptr(FlEventChannel) trigger_channel = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/trigger", FL_METHOD_CODEC(codec));
+  // g_autoptr(FlEventChannel) button_channel = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/button", FL_METHOD_CODEC(codec));
+  // g_autoptr(FlEventChannel) dpad_channel = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/dpad", FL_METHOD_CODEC(codec));
+  // g_autoptr(FlEventChannel) joystick_channel = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/joystick", FL_METHOD_CODEC(codec));
+  // g_autoptr(FlEventChannel) trigger_channel = fl_event_channel_new(messenger, "com.marvinvogl.n_gamepad/trigger", FL_METHOD_CODEC(codec));
 
   fl_method_channel_set_method_call_handler(channel, method_call_cb, nullptr, nullptr);
   // fl_event_channel_set_stream_handlers(button_channel, control_listen_cb, control_cancel_cb, nullptr, nullptr);
@@ -172,8 +170,8 @@ static void my_application_activate(GApplication* application) {
   // fl_event_channel_set_stream_handlers(joystick_channel, control_listen_cb, control_cancel_cb, nullptr, nullptr);
   // fl_event_channel_set_stream_handlers(trigger_channel, control_listen_cb, control_cancel_cb, nullptr, nullptr);
 
-  std::thread steam_input_thread(steam_input_loop);
-  steam_input_thread.detach();
+  SteamInput()->EnableActionEventCallbacks(action_event_cb);
+  g_timeout_add(8, steam_input_loop, self);
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
