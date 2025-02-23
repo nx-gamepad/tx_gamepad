@@ -129,17 +129,17 @@ packages:
       path: "packages/minecraft"
       ref: HEAD
       resolved-ref: "2b9f5a1220fc7fec6a9ce78717f2f9c1126e574c"
-      url: "https://github.com/devEnju/t_gamepad.git"
+      url: "https://github.com/nx-gamepad/t_gamepad.git"
     source: git
     version: "0.0.1"
   n_gamepad:
     dependency: "direct main"
     description:
       name: n_gamepad
-      sha256: "6af7dc327054babeb45990e019766dab55de37d82c82d9e6e6508a7f39ec5f6f"
+      sha256: fd75011d1f0c716c53ed060e0104a314723c5e823c40c8d9423d6077c3364aaf
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.5"
+    version: "0.0.6"
   path:
     dependency: transitive
     description:
@@ -199,7 +199,7 @@ packages:
       path: "."
       ref: HEAD
       resolved-ref: "2b9f5a1220fc7fec6a9ce78717f2f9c1126e574c"
-      url: "https://github.com/devEnju/t_gamepad.git"
+      url: "https://github.com/nx-gamepad/t_gamepad.git"
     source: git
     version: "0.0.1"
   term_glyph:

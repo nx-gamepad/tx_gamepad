@@ -1,5 +1,5 @@
 name: tx_gamepad
-description: Client example new Flutter project.
+description: "Client example for the nx Gamepad project."
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -10,10 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  n_gamepad: ^0.0.5
+  n_gamepad: ^0.0.6
   t_gamepad:
     git:
-      url: https://github.com/devEnju/t_gamepad.git
+      url: https://github.com/nx-gamepad/t_gamepad.git
 
 dev_dependencies:
   flutter_test:
