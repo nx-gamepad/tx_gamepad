@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:n_gamepad/n_gamepad.dart';
 
-class MenuLayout extends Layout {
-  MenuLayout(List<int> data) : super(_MenuLayout(data));
+class MenuComponent extends Component {
+  MenuComponent(List<int> data) : super(MenuLayout(data));
 }
 
-class _MenuLayout extends StatelessWidget {
-  const _MenuLayout(this.data);
+class MenuLayout extends StatelessWidget {
+  const MenuLayout(
+    this.data, {
+    super.key,
+  });
 
   final List<int> data;
 

@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  n_gamepad: ^0.0.6
+  n_gamepad: ^0.0.7
   t_gamepad:
     git:
       url: https://github.com/nx-gamepad/t_gamepad.git

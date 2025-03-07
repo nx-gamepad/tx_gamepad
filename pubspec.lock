@@ -128,7 +128,7 @@ packages:
     description:
       path: "packages/minecraft"
       ref: HEAD
-      resolved-ref: "2b9f5a1220fc7fec6a9ce78717f2f9c1126e574c"
+      resolved-ref: c093cc28b29cecab662ba71a03cacdcb29206862
       url: "https://github.com/nx-gamepad/t_gamepad.git"
     source: git
     version: "0.0.1"
@@ -136,10 +136,10 @@ packages:
     dependency: "direct main"
     description:
       name: n_gamepad
-      sha256: fd75011d1f0c716c53ed060e0104a314723c5e823c40c8d9423d6077c3364aaf
+      sha256: "91d840ae631168b419cb617dd945be123d39b7e328f81e5bf5a2ec2c0bb69596"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.6"
+    version: "0.0.7"
   path:
     dependency: transitive
     description:
@@ -198,7 +198,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "2b9f5a1220fc7fec6a9ce78717f2f9c1126e574c"
+      resolved-ref: c093cc28b29cecab662ba71a03cacdcb29206862
       url: "https://github.com/nx-gamepad/t_gamepad.git"
     source: git
     version: "0.0.1"
@@ -236,4 +236,4 @@ packages:
     version: "14.3.0"
 sdks:
   dart: ">=3.6.0 <4.0.0"
-  flutter: ">=3.18.0-18.0.pre.54"
+  flutter: ">=3.19.0"
