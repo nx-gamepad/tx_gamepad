@@ -1,6 +1,6 @@
 # tx Gamepad
 
-A new Flutter project.
+Flutter project with companion app plugin.
 
 ## Introduction
 
